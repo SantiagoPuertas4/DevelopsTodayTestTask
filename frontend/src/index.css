@@ -1,32 +1,25 @@
-.country-card {
-  background-color: #fafafa;
-  padding: 10px;
-  margin: 10px;
-  border-radius: 8px;
-  cursor: pointer;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.country-card:hover {
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  transform: scale(1.05);
-}
-
-.home-container {
-  padding: 20px;
-  font-family: Arial, sans-serif;
-  background-color: #f0f4f8;
+#root {
+  background-color: #efefef;
+  font-family: 'Work Sans', sans-serif;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding-top: 40px;
 }
 
-.home-container h1 {
-  text-align: center;
+.countryButton {
+  width: 150px;
+  margin: 5px 10px;
+  border-radius: 6px;
+  background-color: #50c878;
 }
 
-.country-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 20px;
+.countryButton p {
+  padding: 0;
+  margin: 0;
+}
+
+.countryImg {
+  max-height: 100px;
+  margin-left: 10px;
 }
