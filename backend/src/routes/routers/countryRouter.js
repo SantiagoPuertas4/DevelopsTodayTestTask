@@ -4,6 +4,4 @@ import { GetController } from '../../controllers/countries/controllers/GetContro
 export const countryRouter = express.Router();
 
 countryRouter.get('/all', GetController.getAll);
-countryRouter.get('/borders/:countryCode', GetController.getBorders);
-countryRouter.get('/population', GetController.getPopulation);
-countryRouter.get('/flag', GetController.getFlag);
+countryRouter.get('/:countryId', GetController.getInfo);

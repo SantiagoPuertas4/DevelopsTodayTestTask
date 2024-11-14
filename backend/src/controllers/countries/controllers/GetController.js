@@ -33,82 +33,69 @@ export class GetController {
     }
   }
 
-  static async getBorders(req, res) {
+  static async getInfo(req, res) {
     try {
-      const { countryCode } = req.params;
+      const { countryId } = req.params;
 
-      if (!countryCode) {
+      if (!countryId) {
         return res.status(400).json({
-          message: 'Country code is required',
+          message: 'Country ID is required',
         });
       }
 
-      const url = `${countryNameBaseUrl}/CountryInfo/${countryCode}`;
+      const availableCountriesResponse = await axios.get(
+        `${countryNameBaseUrl}/AvailableCountries`
+      );
+      const availableCountries = availableCountriesResponse.data;
 
-      const response = await axios.get(url);
-      const countryInfo = response.data;
+      const country = availableCountries.find(
+        (item) => item.countryCode === countryId
+      );
+
+      if (!country) {
+        return res.status(404).json({
+          message: 'Country not found',
+        });
+      }
+
+      const countryCode = country.countryCode;
+
+      const countryInfoResponse = await axios.get(
+        `${countryNameBaseUrl}/CountryInfo/${countryCode}`
+      );
+      const countryInfo = countryInfoResponse.data;
+
+      const populationResponse = await axios.get(
+        `${countryInfoBaseUrl}/population`
+      );
+      const populationData = populationResponse.data.data;
+
+      const population =
+        populationData.find((item) => item.country === country.name)
+          ?.populationCounts || 'Data not available';
+
+      const flagResponse = await axios.get(`${countryInfoBaseUrl}/flag/images`);
+      const flagData = flagResponse.data.data;
+
+      const flagImage =
+        flagData.find((item) => item.name === country.name)?.flag ||
+        'Data not available';
 
       res.json({
-        countryInfo: countryInfo,
-        message: 'Country borders retrieved successfully',
+        countryInfo,
+        population,
+        flagImage,
+        message: 'Country information retrieved successfully',
       });
     } catch (e) {
       if (e.response) {
         res.status(e.response.status).json({
-          message: 'Failed to retrieve country borders',
+          message: 'Failed to retrieve country information',
           details: e.response.data,
         });
       } else {
         res.status(500).json({
-          message: 'An error occurred while retrieving country borders',
-          error: e.message,
-        });
-      }
-    }
-  }
-
-  static async getPopulation(_, res) {
-    try {
-      const response = await axios.get(`${countryInfoBaseUrl}/population`);
-      const population = response.data;
-
-      res.json({
-        population: population,
-        message: 'Population retrieved successfully',
-      });
-    } catch (e) {
-      if (e.response) {
-        res.status(e.response.status).json({
-          message: 'Failed to retrieve population',
-          details: e.response.data,
-        });
-      } else {
-        res.status(500).json({
-          message: 'An error occurred while retrieving population',
-          error: e.message,
-        });
-      }
-    }
-  }
-
-  static async getFlag(_, res) {
-    try {
-      const response = await axios.get(`${countryInfoBaseUrl}/flag/images`);
-      const countries = response.data;
-
-      res.json({
-        countries: countries,
-        message: 'Countries retrieved successfully',
-      });
-    } catch (e) {
-      if (e.response) {
-        res.status(e.response.status).json({
-          message: 'Failed to retrieve countries',
-          details: e.response.data,
-        });
-      } else {
-        res.status(500).json({
-          message: 'An error occurred while retrieving countries',
+          message: 'An error occurred while retrieving country information',
           error: e.message,
         });
       }
