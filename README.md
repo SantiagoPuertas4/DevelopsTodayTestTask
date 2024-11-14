@@ -22,7 +22,7 @@
 
   https://github.com/SantiagoPuertas4/DevelopsTodayTestTask.git
 
-#### Frontend
+## Frontend
 
 - Navigate to the project directory.
 
@@ -34,8 +34,6 @@
 
   VITE_BACKEND_URL=http://127.0.0.1:4000/api/v1
 
-## Usage
-
 ### Development Mode
 
 - To start the server in development mode:
@@ -44,7 +42,7 @@
 
 - The application will be available at http://localhost:3000.
 
-#### Backend
+## Backend
 
 - Navigate to the project directory.
 
@@ -56,8 +54,6 @@
 
   COUNTRY_NAME_BASE_URL=https://date.nager.at/api/v3
   COUNTRY_INFO_BASE_URL=https://countriesnow.space/api/v0.1/countries
-
-## Usage
 
 ### Development Mode
 
