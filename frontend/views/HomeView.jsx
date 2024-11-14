@@ -1,37 +1,51 @@
 import { useEffect, useState } from "react";
 
 export const HomeView = () => {
-  const apiUrl = import.meta.env.VITE_API_URL;
   const [countries, setCountries] = useState();
+  const url = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
-    const getCountries = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch(`${apiUrl}/country/borders/AR`);
-
+        const response = await fetch(`${url}/country/all`);
         if (!response.ok) {
-          throw new Error('Request failed, status code: ' + response.status);
+          throw new Error('Network response was not ok');
         }
-
-        const data = await response.json();
-
-        console.log(data);
-        setCountries(data);
-
-        return data;
+        const result = await response.json();
+        console.log(result);
+        setCountries(result.countries);
       } catch (error) {
-        console.error('There was an error fetching the countries:', error);
-        return null;
+        console.error(error);
       }
-    }
+    };
 
-    getCountries();
-  }, [apiUrl]);
+    fetchData();
+  }, [url]);
+
+  const handleOnClick = async (id) => {
+    try {
+      const response = await fetch(`${url}/country/${id}`);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const result = await response.json();
+      console.log(result);
+      setCountries(result.countries);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
 
   return (
-    <>
-      <p>HomeView</p>
-    </>
+    <div className="container">
+      <h1>Countries</h1>
+      <div className="grid">
+        {countries && countries.map((country, index) => (
+          <p key={index}>{country.name}</p>
+        ))}
+      </div>
+    </div>
   );
 };
 
